@@ -1,0 +1,35 @@
+{% extends "base.html.twig" %}
+
+{% block body %}
+    <form method="get">
+        <label for="q">
+            Address
+        </label>
+        <div>
+            <input type="text" id="q" name="q" style="width:400px;" value="{{ q ? q | escape( 'html' ) : '' }} ">
+            <input type="submit">
+        </div>
+    </form>
+    {% if popularTime | default %}
+        <h1>{{ q }}</h1>
+
+        {% for day in [ 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday' ]%}
+            {% if popularTime[ 'popular_time' ][ day ] | default and popularTime[ 'popular_time' ][ day ] | length > 0 %}
+                <div>
+                    <h2>{{ day }}</h2>
+                    <table>
+                        {% for record in popularTime[ 'popular_time' ][ day ] %}
+                        <tr>
+                            <td style="width:60px;">{{ record[ 'hour' ] }}</td>
+                            <td>
+                                {{ record[ 'info' ] }}
+                                ( {{ record[ 'percent' ] }}% )
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </table>
+                </div>
+            {% endif  %}
+        {% endfor %}
+    {% endif %}
+{% endblock %}
